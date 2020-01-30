@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Movie API</title>
+  <title>Document</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 
@@ -13,44 +13,41 @@
 
   <div class="container">
     <div class="row">
-        <form>
-          <p>
-            <label for="title">Movie Title</label>
-            <input type="text" name="title" id="title">
-          </p>
-          <p>
-            <button class="btn waves-effect waves-light" id="searchMovie">Search Movie</button>
-          </p>
-        </form>
+      <form>
+        <p>
+          <label for="title">Movie Title</label>
+          <input type="text" name="title" id="title">
+        </p>
+        <p>
+          <button class="btn waves-effect waves-light" id="searchMovie">Search Movie</button>
+        </p>
+      </form>
     </div>
     <div class="row">
       <div id="movie" class="col s6">
-        
+
       </div>
-      <div class="col s6">
-        <div id="watchlist" style="visibility: hidden;">
-            <div class="card">
-                <div class="card-content">
-                  <h4>Movie Watchlist</h4>
-                  <ul id='movieList'>
-                  </ul>
-                </div>
-              </div>
-        </div>
+      <div id="watchlist" class="col s6">
+
       </div>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
+    let movie = {}
 
-    
-document.addEventListener('click', event => {
+    document.getElementById('searchMovie').addEventListener('click', event => {
       event.preventDefault()
-      if(event.target.id === 'searchMovie'){
       fetch(`http://www.omdbapi.com/?t=${document.getElementById('title').value}&apikey=trilogy`)
         .then(r => r.json())
         .then(({ Title, Year, Director, Poster, Plot }) => {
+          movie = {
+            title: Title,
+            year: Year,
+            director: Director,
+            plot: Plot
+          }
           document.getElementById('movie').innerHTML = `
           <div class="card">
             <div class="card-image">
@@ -63,29 +60,38 @@ document.addEventListener('click', event => {
               <p>${Plot}</p>
             </div>
             <div class="card-action">
-              <button class="btn waves-effect waves-light" id="addWatchlist">Add To Watchlist</button>
+              <button class="btn waves-effect waves-light addWatchlist">Add To Watchlist</button>
             </div>
           </div>
         `
         })
         .catch(e => console.error(e))
-      }
-      else if (event.target.id === 'addWatchlist' ){
-        document.getElementById('watchlist').style.visibility = 'visible'
-        fetch(`http://www.omdbapi.com/?t=${document.getElementById('title').value}&apikey=trilogy`)
-          .then(r => r.json())
-          .then(({ Title}) => {
-            let addMovie = document.createElement('li')
-            addMovie.textContent = `${Title}`
-          document.getElementById('movieList').append(addMovie) 
-          
     })
-    .catch(e => console.error(e));
-  } 
-})
 
-
-
+    document.addEventListener('click', event => {
+      if (event.target.classList.contains('addWatchlist')) {
+        let movieElem = document.createElement('div')
+        movieElem.className = 'card'
+        movieElem.innerHTML = `
+            <div class="card-content">
+              <h3>${movie.title}</h3>
+              <h4>Directed by ${movie.director}</h4>
+              <h5>Year: ${movie.year}</h5>
+              <p>${movie.plot}</p>
+            </div>
+            <div class="card-action">
+              <button class="btn waves-effect waves-light removeWatchlist">Remove from Watchlist</button>
+            </div>
+        `
+        document.getElementById('watchlist').append(movieElem)
+      }
+    })
+    document.addEventListener('click', removeEvent => {
+      if (event.target.classList.contains('removeWatchList')) {
+            console.log('ping')
+        
+      }
+    })
   </script>
 </body>
 
