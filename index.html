@@ -28,7 +28,15 @@
         
       </div>
       <div class="col s6">
-
+        <div id="watchlist" style="visibility: hidden;">
+            <div class="card">
+                <div class="card-content">
+                  <h4>Movie Watchlist</h4>
+                  <ul id='movieList'>
+                  </ul>
+                </div>
+              </div>
+        </div>
       </div>
     </div>
   </div>
@@ -36,8 +44,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
 
-    document.getElementById('searchMovie').addEventListener('click', event => {
+    
+document.addEventListener('click', event => {
       event.preventDefault()
+      if(event.target.id === 'searchMovie'){
       fetch(`http://www.omdbapi.com/?t=${document.getElementById('title').value}&apikey=trilogy`)
         .then(r => r.json())
         .then(({ Title, Year, Director, Poster, Plot }) => {
@@ -53,13 +63,27 @@
               <p>${Plot}</p>
             </div>
             <div class="card-action">
-              <button class="btn waves-effect waves-light addWatchlist">Add To Watchlist</button>
+              <button class="btn waves-effect waves-light" id="addWatchlist">Add To Watchlist</button>
             </div>
           </div>
         `
         })
         .catch(e => console.error(e))
+      }
+      else if (event.target.id === 'addWatchlist' ){
+        document.getElementById('watchlist').style.visibility = 'visible'
+        fetch(`http://www.omdbapi.com/?t=${document.getElementById('title').value}&apikey=trilogy`)
+          .then(r => r.json())
+          .then(({ Title}) => {
+            let addMovie = document.createElement('li')
+            addMovie.textContent = `${Title}`
+          document.getElementById('movieList').append(addMovie) 
+          
     })
+    .catch(e => console.error(e));
+  } 
+})
+
 
 
   </script>
