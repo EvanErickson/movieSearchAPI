@@ -69,12 +69,14 @@
             </div>
           </div>
         `
+        document.getElementById('title').value = ''
         })
         .catch(e => console.error(e))
     })
 
     document.addEventListener('click', event => {
       if (event.target.classList.contains('addWatchlist')) {
+        event.target.parentNode.parentNode.remove()
         let movieElem = document.createElement('div')
         movieElem.className = 'card'
         movieElem.innerHTML = `
