@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>API Practice</title>
+
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+</head>
+<body>
+
+    <form>
+        <p>
+          <label for="title">Movie Title</label>
+          <input type="text" name="title" id="title">
+        </p>
+        <p>
+          <button id="searchMovie">Search Movie</button>
+        </p>
+    </form >
+    <div id="movie"></div>
+
+
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    
+<script>
+    document.getElementById('searchMovie').addEventListener('click', function (event){
+        event.preventDefault();
+        let movie = document.getElementById('title').value
+        console.log(movie)
+        fetch("http://www.omdbapi.com/?t=" + movie + "&apikey=trilogy")
+        .then(r => r.json())
+        .then(({Title, Year, Plot, Director, Poster}) => {
+            document.getElementById('movie').innerHTML = `
+                <img src="${Poster}" alt="${Title}">
+                <h1>${Title}</h1>
+                <h2>${Director}</h2>
+                <h3>${Year}</h3>
+                <p>${Plot}</p>
+            `
+        })
+        .catch(e => console.error(e))
+        });
+
+        
+        
+</script>
+</body>
+</html>
