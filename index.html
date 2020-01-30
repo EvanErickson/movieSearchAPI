@@ -28,7 +28,15 @@
         
       </div>
       <div class="col s6">
-        <div id="watchlist"></div>
+        <div id="watchlist" style="visibility: hidden;">
+            <div class="card">
+                <div class="card-content">
+                  <h4>Movie Watchlist</h4>
+                  <ul id='movieList'>
+                  </ul>
+                </div>
+              </div>
+        </div>
       </div>
     </div>
   </div>
@@ -63,18 +71,13 @@ document.addEventListener('click', event => {
         .catch(e => console.error(e))
       }
       else if (event.target.id === 'addWatchlist' ){
+        document.getElementById('watchlist').style.visibility = 'visible'
         fetch(`http://www.omdbapi.com/?t=${document.getElementById('title').value}&apikey=trilogy`)
           .then(r => r.json())
           .then(({ Title}) => {
-            document.getElementById('watchlist').innerHTML = `
-            <div class="card">
-            <div class="card-content">
-              <h4>Movie Watchlist</h4>
-              <ul id='movieList'>
-
-              </ul>
-            </div>
-          </div>`
+            let addMovie = document.createElement('li')
+            addMovie.textContent = `${Title}`
+          document.getElementById('movieList').append(addMovie) 
           
     })
     .catch(e => console.error(e));
